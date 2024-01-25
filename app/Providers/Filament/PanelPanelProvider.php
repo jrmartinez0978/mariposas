@@ -40,6 +40,10 @@ class PanelPanelProvider extends PanelProvider
             ->widgets([
                 Widgets\AccountWidget::class,
             ])
+            ->login()
+            ->registration()
+            ->passwordReset()
+            ->emailVerification()
             ->profile()
             ->middleware([
                 EncryptCookies::class,

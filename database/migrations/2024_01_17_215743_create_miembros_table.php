@@ -15,7 +15,7 @@ class CreateMiembrosTable extends Migration
             $table->string('cedula')->unique(); // Cambiado de 'dni' a 'cedula' y marcado como único
             $table->string('provincia');
             $table->string('email')->unique();
-            $table->string('phone')->nullable();
+            $table->string('telefono')->nullable();
             $table->boolean('estado')->default(true); // Cambiado de 'miembros_estado' a 'estado'
             $table->string('partido'); // Nueva columna 'partido'
             $table->unsignedBigInteger('lider_grupo_id')->nullable(); // Quién refirió a este miembro

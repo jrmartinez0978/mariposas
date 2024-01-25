@@ -57,6 +57,19 @@ class MiembroResource extends Resource
                 Forms\Components\TextInput::make('telefono')
                     ->tel()
                     ->maxLength(255),
+                    Forms\Components\Checkbox::make('email_verified')
+    ->label('Email Verificado')
+    ->reactive()
+    ->afterStateUpdated(function (callable $set, $state, $record) {
+        if ($state) {
+            // Asegúrate de que el miembro tiene una relación 'user' y actualiza 'email_verified_at'
+            $record->user->email_verified_at = now();
+            $record->user->save();
+        } else {
+            $record->user->email_verified_at = null;
+            $record->user->save();
+        }
+    }),
                 Forms\Components\Toggle::make('estado')
                     ->required(),
                 Forms\Components\Select::make('rol')
