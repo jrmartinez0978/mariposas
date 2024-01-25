@@ -41,7 +41,6 @@ class PanelPanelProvider extends PanelProvider
                 Widgets\AccountWidget::class,
             ])
             ->login()
-            ->registration()
             ->passwordReset()
             ->emailVerification()
             ->profile()
