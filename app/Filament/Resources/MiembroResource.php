@@ -117,7 +117,7 @@ class MiembroResource extends Resource
     public static function getRelations(): array
     {
         return [
-            // Define tus relaciones aquí si son necesarias
+            // Define tus relaciones aquí si son necesaria
         ];
     }
 

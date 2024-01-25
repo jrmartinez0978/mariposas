@@ -23,6 +23,7 @@ class PanelPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
+      //panel de filament
         return $panel
             ->default()
             ->id('panel')

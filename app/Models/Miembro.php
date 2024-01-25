@@ -89,7 +89,7 @@ class Miembro extends Model
     elseif ($this->rol === 'Mariposa Madre' && $this->todosReferidosTienenDiezReferidos()) {
         $this->rol = 'Mariposa Reyna';
     }
-    // Degradar a 'Mariposa Azul' si no se cumple el mínimo de referidos
+    // Degradar a 'Mariposa Azul' si no se cumple el mínimo de referido
     elseif ($cantidadMiembrosReferidos < 3 && $this->rol === 'Mariposa Madre') {
         $this->rol = 'Mariposa Azul';
     }
