@@ -11,7 +11,18 @@ class Miembro extends Model
 {
     protected $table = 'miembros';
     protected $primaryKey = 'miembros_id';
-    protected $fillable = ['nombres', 'apellidos', 'dni', 'provincia', 'email', 'phone', 'miembros_estado', 'lider_grupo_id', 'rol'];
+    protected $fillable = [
+        'nombres',
+        'apellidos',
+        'cedula',   // Cambiado de 'dni' a 'cedula'
+        'provincia',
+        'email',
+        'telefono',
+        'estado',   // Cambiado de 'miembros_estado' a 'estado'
+        'lider_grupo_id',
+        'rol',
+        'partido'   // Nueva columna 'partido'
+    ];
 
     protected static function booted()
 {

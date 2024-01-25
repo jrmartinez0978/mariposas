@@ -40,20 +40,24 @@ class MiembroResource extends Resource
                 Forms\Components\TextInput::make('apellidos')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('dni')
+                Forms\Components\TextInput::make('cedula')
                     ->required()
+                    ->unique(Miembro::class, 'cedula', ignoreRecord: true)
                     ->maxLength(255),
                 Forms\Components\TextInput::make('provincia')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('partido') // Nuevo campo 'partido'
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('phone')
+                Forms\Components\TextInput::make('telefono')
                     ->tel()
                     ->maxLength(255),
-                Forms\Components\Toggle::make('miembros_estado')
+                Forms\Components\Toggle::make('estado')
                     ->required(),
                 Forms\Components\Select::make('rol')
                     ->options([
@@ -73,11 +77,12 @@ class MiembroResource extends Resource
             Tables\Columns\TextColumn::make('liderGrupo.nombreCompleto')->label('Líder de Grupo'),
             Tables\Columns\TextColumn::make('nombres')->searchable(),
             Tables\Columns\TextColumn::make('apellidos')->searchable(),
-            Tables\Columns\TextColumn::make('dni')->searchable(),
+            Tables\Columns\TextColumn::make('cedula')->searchable(),
             Tables\Columns\TextColumn::make('provincia')->searchable(),
+            Tables\Columns\TextColumn::make('partido'),
             Tables\Columns\TextColumn::make('email')->searchable(),
-            Tables\Columns\TextColumn::make('phone')->searchable(),
-            Tables\Columns\IconColumn::make('miembros_estado')->boolean(),
+            Tables\Columns\TextColumn::make('telefono')->searchable(),
+            Tables\Columns\IconColumn::make('estado')->boolean(),
             Tables\Columns\TextColumn::make('rol')->label('Rol'),
             Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
             Tables\Columns\TextColumn::make('updated_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
