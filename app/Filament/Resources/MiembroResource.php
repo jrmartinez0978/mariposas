@@ -84,33 +84,7 @@ class MiembroResource extends Resource
             Tables\Columns\TextColumn::make('password')->label('Contraseña'),
             // ... otras columnas ...
         ])
-        // ... definiciones de columnas, filtros, acciones, etc. ...
-        ->query(function ($query) {
-            $usuarioAutenticado = auth()->user();
-            $miembroAutenticado = $usuarioAutenticado->miembro;
-
-            switch ($miembroAutenticado->rol) {
-                case 'Mariposa Reina':
-                    // Incluir 'Mariposas Madres' y sus 'Mariposas Azules'
-                    return $query->where(function ($query) use ($miembroAutenticado) {
-                        $query->where('lider_grupo_id', $miembroAutenticado->id)
-                              ->orWhereHas('liderGrupo', function ($query) use ($miembroAutenticado) {
-                                  $query->where('lider_grupo_id', $miembroAutenticado->id)
-                                        ->where('rol', 'Mariposa Madre');
-                              });
-                    });
-                case 'Mariposa Madre':
-                    // Incluir solo 'Mariposas Azules' referidas por esta 'Mariposa Madre'
-                    return $query->where('lider_grupo_id', $miembroAutenticado->id)
-                                 ->where('rol', 'Mariposa Azul');
-                case 'Mariposa Azul':
-                    // 'Mariposas Azules' podrían ver solo sus propios detalles o seguir otra regla
-                    return $query->where('id', $miembroAutenticado->id);
-                default:
-                    // Restricción por defecto para otros roles o usuarios no autenticados
-                    return $query->where('id', 0); // No muestra ningún registro
-            }
-        })
+        // ... definiciones de columnas, filtros, acciones, etc. ..
         ->filters([
                 // Puedes añadir filtros si son necesarios
             ])
