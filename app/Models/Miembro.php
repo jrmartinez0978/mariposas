@@ -87,14 +87,14 @@ class Miembro extends Model
     }
     // Actualizar a 'Mariposa Reina' si se cumplen las condiciones
     elseif ($this->rol === 'Mariposa Madre' && $this->todosReferidosTienenDiezReferidos()) {
-        $this->rol = 'Mariposa Reina';
+        $this->rol = 'Mariposa Reyna';
     }
     // Degradar a 'Mariposa Azul' si no se cumple el mínimo de referidos
     elseif ($cantidadMiembrosReferidos < 3 && $this->rol === 'Mariposa Madre') {
         $this->rol = 'Mariposa Azul';
     }
     // Degradar a 'Mariposa Madre' si los referidos ya no cumplen las condiciones para ser 'Mariposa Reina'
-    elseif ($this->rol === 'Mariposa Reina' && !$this->todosReferidosTienenDiezReferidos()) {
+    elseif ($this->rol === 'Mariposa Reyna' && !$this->todosReferidosTienenDiezReferidos()) {
         $this->rol = 'Mariposa Madre';
     }
 

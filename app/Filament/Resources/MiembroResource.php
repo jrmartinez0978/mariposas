@@ -63,7 +63,7 @@ class MiembroResource extends Resource
                     ->options([
                         'Mariposa Azul' => 'Mariposa Azul',
                         'Mariposa Madre' => 'Mariposa Madre',
-                        'Mariposa Reina' => 'Mariposa Reina',
+                        'Mariposa Reyna' => 'Mariposa Reyna',
                     ])
                     ->default('Mariposa Azul')
                     ->disabled(),
