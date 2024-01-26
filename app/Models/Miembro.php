@@ -83,19 +83,19 @@ class Miembro extends Model
 
     // Actualizar a 'Mariposa Madre' si se cumplen las condiciones
     if ($cantidadMiembrosReferidos >= 3 && $this->rol === 'Mariposa Azul') {
-        $this->rol = 'Mariposa Madre';
+        $this->rol = 'Mariposa Padre/Madre';
     }
     // Actualizar a 'Mariposa Reina' si se cumplen las condiciones
-    elseif ($this->rol === 'Mariposa Madre' && $this->todosReferidosTienenDiezReferidos()) {
-        $this->rol = 'Mariposa Reyna';
+    elseif ($this->rol === 'Mariposa Padre/Madre' && $this->todosReferidosTienenDiezReferidos()) {
+        $this->rol = 'Mariposa Ejecutiva';
     }
     // Degradar a 'Mariposa Azul' si no se cumple el mínimo de referido
-    elseif ($cantidadMiembrosReferidos < 3 && $this->rol === 'Mariposa Madre') {
+    elseif ($cantidadMiembrosReferidos < 3 && $this->rol === 'Mariposa Padre/Madre') {
         $this->rol = 'Mariposa Azul';
     }
     // Degradar a 'Mariposa Madre' si los referidos ya no cumplen las condiciones para ser 'Mariposa Reina'
-    elseif ($this->rol === 'Mariposa Reyna' && !$this->todosReferidosTienenDiezReferidos()) {
-        $this->rol = 'Mariposa Madre';
+    elseif ($this->rol === 'Mariposa Ejecutiva' && !$this->todosReferidosTienenDiezReferidos()) {
+        $this->rol = 'Mariposa Padre/Madre';
     }
 
     $this->save();

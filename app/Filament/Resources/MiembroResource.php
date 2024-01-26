@@ -75,8 +75,8 @@ class MiembroResource extends Resource
                 Forms\Components\Select::make('rol')
                     ->options([
                         'Mariposa Azul' => 'Mariposa Azul',
-                        'Mariposa Madre' => 'Mariposa Madre',
-                        'Mariposa Reyna' => 'Mariposa Reyna',
+                        'Mariposa Madre' => 'Mariposa Padre/Madre',
+                        'Mariposa Reyna' => 'Mariposa Ejecutiva',
                     ])
                     ->default('Mariposa Azul')
                     ->disabled(),
