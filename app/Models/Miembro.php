@@ -28,7 +28,7 @@ class Miembro extends Model
 {
     static::creating(function ($miembro) {
         // Generar una contraseña segura
-        $password = Str::random(10); // Esta contraseña se usará para el User
+        $password = Str::random(3) . rand(100, 999) . '@'; // Esta contraseña se usará para el User
 
         // Almacenar la contraseña en texto plano en el modelo, no es ideal por razones de seguridad
         // Considera enviar esta contraseña por correo electrónico o usar un enlace de restablecimiento de contraseña
@@ -46,6 +46,18 @@ class Miembro extends Model
         // Asignar el ID del usuario al miembro
         $miembro->user_id = $user->id;
         $miembro->save();
+        });
+
+        static::updated(function ($miembro) {
+            if ($miembro->user) {
+                if ($miembro->wasChanged('email')) {
+                    $miembro->user->email = $miembro->email;
+                }
+                if ($miembro->wasChanged('password')) {
+                    $miembro->user->password = Hash::make($miembro->password);
+                }
+                $miembro->user->save();
+            }
         });
 
         static::deleting(function ($miembro) {
