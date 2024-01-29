@@ -21,14 +21,28 @@ class Miembro extends Model
         'estado',   // Cambiado de 'miembros_estado' a 'estado'
         'lider_grupo_id',
         'rol',
-        'partido'   // Nueva columna 'partido'
+        'municipio'   // Nueva columna 'municipio'
     ];
+
+    public function provincia()
+    {
+        return $this->belongsTo(Provincia::class);
+    }
+
+    public function municipio()
+    {
+        return $this->belongsTo(Municipio::class);
+    }
+
+    /** creacion miembro */
 
     protected static function booted()
 {
     static::creating(function ($miembro) {
         // Generar una contraseña segura
-        $password = Str::random(3) . rand(100, 999) . '@'; // Esta contraseña se usará para el User
+        $simbolos = ['@', '#', '$', '%', '&'];
+        $password = Str::random(3) . rand(100, 999) . $simbolos[array_rand($simbolos)];
+
 
         // Almacenar la contraseña en texto plano en el modelo, no es ideal por razones de seguridad
         // Considera enviar esta contraseña por correo electrónico o usar un enlace de restablecimiento de contraseña

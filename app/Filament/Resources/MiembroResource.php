@@ -14,6 +14,9 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Forms\Components\Select;
+use App\Models\Provincia;
+use App\Models\Municipio;
 
 class MiembroResource extends Resource
 {
@@ -44,12 +47,20 @@ class MiembroResource extends Resource
                     ->required()
                     ->unique(Miembro::class, 'cedula', ignoreRecord: true)
                     ->maxLength(255),
-                Forms\Components\TextInput::make('provincia')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('partido') // Nuevo campo 'partido'
-                    ->required()
-                    ->maxLength(255),
+                    Select::make('provincia_id')
+                    ->label('Provincia')
+                    ->options(Provincia::all()->pluck('nombre', 'id'))
+                    ->searchable()
+                    ->required(),
+
+                Select::make('municipio_id')
+                    ->label('Municipio')
+                    ->options(
+                        fn (callable $get) => Municipio::where('provincia_id', $get('provincia_id'))->pluck('nombre', 'id')
+                    )
+                    ->searchable()
+                    ->dependable('provincia_id') // Esto hace que el campo de municipio se actualice cuando cambia provincia
+                    ->required(),
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
@@ -75,13 +86,13 @@ class MiembroResource extends Resource
                 Forms\Components\Select::make('rol')
                     ->options([
                         'Mariposa Azul' => 'Mariposa Azul',
-                        'Mariposa Madre' => 'Mariposa Padre/Madre',
-                        'Mariposa Reyna' => 'Mariposa Ejecutiva',
+                        'Mariposa Padre/Madre' => 'Mariposa Padre/Madre',
+                        'Mariposa Ejecutiva' => 'Mariposa Ejecutiva',
                     ])
                     ->default('Mariposa Azul')
                     ->disabled(),
             ]);
-                
+
     }
     public static function table(Table $table): Table
     {
@@ -92,7 +103,7 @@ class MiembroResource extends Resource
             Tables\Columns\TextColumn::make('apellidos')->searchable(),
             Tables\Columns\TextColumn::make('cedula')->searchable(),
             Tables\Columns\TextColumn::make('provincia')->searchable(),
-            Tables\Columns\TextColumn::make('partido'),
+            Tables\Columns\TextColumn::make('municipio'),
             Tables\Columns\TextColumn::make('email')->searchable(),
             Tables\Columns\TextColumn::make('telefono')->searchable(),
             Tables\Columns\IconColumn::make('estado')->boolean(),
