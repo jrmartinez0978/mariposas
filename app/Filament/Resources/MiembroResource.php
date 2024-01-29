@@ -59,7 +59,7 @@ class MiembroResource extends Resource
                         fn (callable $get) => Municipio::where('provincia_id', $get('provincia_id'))->pluck('nombre', 'id')
                     )
                     ->searchable()
-                    ->dependable('provincia_id') // Esto hace que el campo de municipio se actualice cuando cambia provincia
+                    ->dependsOn('provincia_id') // Esto hace que el campo de municipio se actualice cuando cambia provincia
                     ->required(),
                 Forms\Components\TextInput::make('email')
                     ->email()
