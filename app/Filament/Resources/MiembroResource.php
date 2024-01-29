@@ -81,7 +81,7 @@ class MiembroResource extends Resource
                     ->default('Mariposa Azul')
                     ->disabled(),
             ]);
-
+                
     }
     public static function table(Table $table): Table
     {
