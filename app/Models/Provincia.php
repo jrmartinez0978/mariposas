@@ -9,8 +9,8 @@ class Provincia extends Model
     protected $fillable = ['nombre'];
 
     public function municipios()
-    {
-        return $this->hasMany(Municipio::class);
-    }
+{
+    return $this->hasMany(Municipio::class);
+}
 }
 
