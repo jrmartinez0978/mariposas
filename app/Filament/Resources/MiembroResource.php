@@ -65,6 +65,7 @@ class MiembroResource extends Resource
                     return Municipio::where('provincia_id', $provinciaId)->pluck('nombre', 'id');
                 })
                 ->required()
+                ->dependsOn('provincia_id')
                 ->reactive(),
                  Forms\Components\TextInput::make('email')
                     ->email()
