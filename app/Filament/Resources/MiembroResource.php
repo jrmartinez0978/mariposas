@@ -49,28 +49,19 @@ class MiembroResource extends Resource
                     ->maxLength(255),
                     Select::make('provincia_id')
                     ->label('Provincia')
-                    ->relationship('provincia', 'nombre')
+                    ->relationship('provincia', 'nombre') // Cambia 'nombre' por el campo que quieras mostrar
                     ->required()
-                    ->reactive()
-                    ->afterStateUpdated(function (callable $set, $state, $record, Select $component) {
-                        $set('municipio_id', null);
-                        $component->options(
-                            Municipio::where('provincia_id', $state)->pluck('nombre', 'id')
-                        );
-                    }),
+                    ->reactive(),
 
                 Select::make('municipio_id')
                     ->label('Municipio')
-                    ->options(function (callable $get) {
-                        $provinciaId = $get('provincia_id');
-                        if (!$provinciaId) {
-                            return [];
-                        }
-                        return Municipio::where('provincia_id', $provinciaId)->pluck('nombre', 'id');
-                    })
-                    ->searchable()
+                    ->relationship('municipio', 'nombre') // Cambia 'nombre' por el campo que quieras mostrar
                     ->required()
-                    ->dependsOn('provincia_id'),
+                    ->reactive()
+                    ->afterStateUpdated(function (callable $set, $state) {
+                        $set('municipio_id', null);
+                        return Municipio::where('provincia_id', $state)->pluck('nombre', 'id');
+                    }),
                  Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
