@@ -12,8 +12,15 @@ class Provincia extends Model
         return $this->hasMany(Municipio::class);
     }
 
+    public function miembros()
+    {
+        return $this->hasManyThrough(Miembro::class, Municipio::class);
+    }
+
     // Accessor para contar municipios
     public function getCountMunicipiosAttribute() {
         return $this->municipios()->count();
+
+
     }
 }

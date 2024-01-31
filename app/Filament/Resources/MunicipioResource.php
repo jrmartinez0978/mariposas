@@ -13,6 +13,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Columns\TextColumn;
 
 class MunicipioResource extends Resource
 {
@@ -43,25 +44,31 @@ class MunicipioResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('nombre')->label('Nombre del Municipio'),
                 Tables\Columns\TextColumn::make('provincia.nombre')->label('Provincia'),
+                TextColumn::make('miembros_count')->label('Número de Miembros')->sortable(),
                 // ... otras columnas si son necesarias ...
             ])
             ->filters([
-                //
+                // ... filtros si son necesarios ...
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                // ... otras acciones si son necesarias ...
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                Tables\Actions\DeleteBulkAction::make(),
+                // ... otras acciones en masa si son necesarias ...
             ]);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->withCount('miembros');
     }
 
     public static function getRelations(): array
     {
         return [
-            //
+            // ... relaciones si son necesarias ...
         ];
     }
 
@@ -71,6 +78,7 @@ class MunicipioResource extends Resource
             'index' => Pages\ListMunicipios::route('/'),
             'create' => Pages\CreateMunicipio::route('/create'),
             'edit' => Pages\EditMunicipio::route('/{record}/edit'),
+            // ... otras páginas si son necesarias ...
         ];
     }
 }

@@ -12,4 +12,8 @@ class Municipio extends Model
     {
         return $this->belongsTo(Provincia::class);
     }
+    public function miembros()
+    {
+        return $this->hasMany(Miembro::class);
+    }
 }

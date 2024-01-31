@@ -36,6 +36,7 @@ class ProvinciaResource extends Resource {
             ->columns([
                 TextColumn::make('nombre')->searchable()->sortable(),
                 TextColumn::make('municipios_count')->label('Número de Municipios')->sortable(),
+                TextColumn::make('miembros_count')->label('Número de Miembros')->sortable(),
                 // ... otras columnas ...
             ])
             ->actions([
@@ -45,11 +46,11 @@ class ProvinciaResource extends Resource {
             ->bulkActions([
                 DeleteBulkAction::make(),
             ])
-            ->defaultSort('municipios_count'); // Ordenar por número de municipios
+            ->defaultSort('municipios_count', 'miembros_count'); // Ordenar por número de municipios
     }
 
     public static function getEloquentQuery(): Builder {
-        return parent::getEloquentQuery()->withCount('municipios');
+        return parent::getEloquentQuery()->withCount('municipios', 'miembros');
     }
 
     public static function getPages(): array {
