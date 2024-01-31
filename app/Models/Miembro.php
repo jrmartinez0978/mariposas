@@ -26,12 +26,12 @@ class Miembro extends Model
 
     public function provincia()
     {
-        return $this->belongsTo(Provincia::class);
+        return $this->belongsTo(Provincia::class, 'provincia_id');
     }
 
     public function municipio()
     {
-        return $this->belongsTo(Municipio::class);
+        return $this->belongsTo(Municipio::class, 'municipio_id');
     }
 
     /** creacion miembro */
