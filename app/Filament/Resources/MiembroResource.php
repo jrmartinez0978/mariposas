@@ -48,25 +48,31 @@ class MiembroResource extends Resource
                     ->unique(Miembro::class, 'cedula', ignoreRecord: true)
                     ->maxLength(255),
                     Select::make('provincia_id')
-                ->label('Provincia')
-                ->relationship('provincia', 'nombre') // Cambia 'nombre' por el campo que quieras mostrar
-                ->required()
-                ->reactive()
-                ->afterStateUpdated(fn (callable $set) => $set('municipio_id', null)), // Resetea municipio_id cuando provincia_id cambia
+    ->label('Provincia')
+    ->relationship('provincia', 'nombre')
+    ->reactive() // Hace que el formulario se vuelva a enviar cuando cambia este campo
+    ->required(),
 
-            Select::make('municipio_id')
-                ->label('Municipio')
-                ->options(function (callable $get) {
-                    $provinciaId = $get('provincia_id');
-                    if (!$provinciaId) {
-                        return [];
-                    }
+Select::make('municipio_id')
+    ->label('Municipio')
+    ->options(function (callable $get) {
+        $provinciaId = $get('provincia_id');
+        if (! $provinciaId) {
+            return [];
+        }
 
-                    return Municipio::where('provincia_id', $provinciaId)->pluck('nombre', 'id');
-                })
-                ->required()
-                ->dependsOn('provincia_id')
-                ->reactive(),
+        return Municipio::where('provincia_id', $provinciaId)->pluck('nombre', 'id');
+    })
+    ->searchable()
+    ->required()
+    ->reactive() // Hace que el formulario se vuelva a enviar cuando cambia este campo
+    ->loadOptions(function (callable $get) {
+        $provinciaId = $get('provincia_id');
+        if (! $provinciaId) {
+            return [];
+        }
+        return Municipio::where('provincia_id', $provinciaId)->pluck('nombre', 'id');
+    }),
                  Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
