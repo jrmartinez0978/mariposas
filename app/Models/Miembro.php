@@ -15,13 +15,13 @@ class Miembro extends Model
         'nombres',
         'apellidos',
         'cedula',   // Cambiado de 'dni' a 'cedula'
-        'provincia',
+        'provincia_id',
         'email',
         'telefono',
         'estado',   // Cambiado de 'miembros_estado' a 'estado'
         'lider_grupo_id',
         'rol',
-        'municipio'   // Nueva columna 'municipio'
+        'municipio_id'   // Nueva columna 'municipio'
     ];
 
     public function provincia()
