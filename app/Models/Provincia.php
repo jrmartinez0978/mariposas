@@ -8,9 +8,12 @@ class Provincia extends Model
 {
     protected $fillable = ['nombre'];
 
-    public function municipios()
-{
-    return $this->hasMany(Municipio::class);
-}
-}
+    public function municipios() {
+        return $this->hasMany(Municipio::class);
+    }
 
+    // Accessor para contar municipios
+    public function getCountMunicipiosAttribute() {
+        return $this->municipios()->count();
+    }
+}

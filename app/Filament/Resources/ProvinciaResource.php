@@ -12,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Columns\TextColumn;
 
 class ProvinciaResource extends Resource
 {
@@ -36,6 +37,9 @@ class ProvinciaResource extends Resource
         return $table
             ->columns([
             Tables\Columns\TextColumn::make('nombre')->label('Nombre'),
+            TextColumn::make('count_municipios')
+                ->label('Número de Municipios')
+                ->sortable(),
                 //
             ])
             ->filters([
