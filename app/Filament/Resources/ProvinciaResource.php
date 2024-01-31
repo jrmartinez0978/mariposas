@@ -17,12 +17,16 @@ class ProvinciaResource extends Resource
 {
     protected static ?string $model = Provincia::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-map'; // Elige un icono adecuado
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
+                Forms\Components\TextInput::make('nombre')
+                    ->required()
+                    ->label('Nombre de la Provincia')
+                    ->maxLength(255),
                 //
             ]);
     }
@@ -31,6 +35,7 @@ class ProvinciaResource extends Resource
     {
         return $table
             ->columns([
+            Tables\Columns\TextColumn::make('nombre')->label('Nombre'),
                 //
             ])
             ->filters([
