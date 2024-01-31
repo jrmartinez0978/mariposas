@@ -49,30 +49,22 @@ class MiembroResource extends Resource
                     ->maxLength(255),
                     Select::make('provincia_id')
     ->label('Provincia')
-    ->relationship('provincia', 'nombre')
-    ->reactive() // Hace que el formulario se vuelva a enviar cuando cambia este campo
+    ->relationship('provincia', 'nombre') // Asegúrate de que 'nombre' es el campo correcto que quieres mostrar
+    ->reactive() // Hace que este campo sea reactivo
     ->required(),
 
 Select::make('municipio_id')
     ->label('Municipio')
     ->options(function (callable $get) {
         $provinciaId = $get('provincia_id');
-        if (! $provinciaId) {
+        if (!$provinciaId) {
             return [];
         }
 
         return Municipio::where('provincia_id', $provinciaId)->pluck('nombre', 'id');
     })
-    ->searchable()
-    ->required()
-    ->reactive() // Hace que el formulario se vuelva a enviar cuando cambia este campo
-    ->loadOptions(function (callable $get) {
-        $provinciaId = $get('provincia_id');
-        if (! $provinciaId) {
-            return [];
-        }
-        return Municipio::where('provincia_id', $provinciaId)->pluck('nombre', 'id');
-    }),
+    ->reactive() // Hace que este campo sea reactivo y se actualice cuando cambia 'provincia_id'
+    ->required(),
                  Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
