@@ -41,10 +41,16 @@ class MunicipioResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->columns([
-                Tables\Columns\TextColumn::make('nombre')->label('Nombre del Municipio'),
-                Tables\Columns\TextColumn::make('provincia.nombre')->label('Provincia'),
-                TextColumn::make('miembros_count')->label('Número de Miembros')->sortable(),
+        ->columns([
+            Tables\Columns\TextColumn::make('nombre')
+                ->label('Nombre del Municipio')
+                ->searchable(), // Hace esta columna buscable
+            Tables\Columns\TextColumn::make('provincia.nombre')
+                ->label('Provincia')
+                ->searchable(), // Hace esta columna buscable si quieres buscar por provincia
+            TextColumn::make('miembros_count')
+                ->label('Número de Miembros')
+                ->sortable(),
                 // ... otras columnas si son necesarias ...
             ])
             ->filters([
