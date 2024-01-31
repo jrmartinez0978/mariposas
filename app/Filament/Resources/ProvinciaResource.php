@@ -35,8 +35,8 @@ class ProvinciaResource extends Resource {
         return $table
             ->columns([
                 TextColumn::make('nombre')->searchable()->sortable(),
-                TextColumn::make('municipios_count')->label('Número de Municipios')->sortable(),
-                TextColumn::make('miembros_count')->label('Número de Miembros')->sortable(),
+                TextColumn::make('municipios_count')->label('Municipios O Ditritos Municipales')->sortable(),
+                TextColumn::make('miembros_count')->label('Mariposas por Provincia')->sortable(),
                 // ... otras columnas ...
             ])
             ->actions([

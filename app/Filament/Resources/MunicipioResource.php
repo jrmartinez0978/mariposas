@@ -49,7 +49,7 @@ class MunicipioResource extends Resource
                 ->label('Provincia')
                 ->searchable(), // Hace esta columna buscable si quieres buscar por provincia
             TextColumn::make('miembros_count')
-                ->label('Número de Miembros')
+                ->label('Mariposas por Municipio')
                 ->sortable(),
                 // ... otras columnas si son necesarias ...
             ])
