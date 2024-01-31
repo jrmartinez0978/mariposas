@@ -48,22 +48,24 @@ class MiembroResource extends Resource
                     ->unique(Miembro::class, 'cedula', ignoreRecord: true)
                     ->maxLength(255),
                     Select::make('provincia_id')
-                    ->label('Provincia')
-                    ->relationship('provincia', 'nombre') // Cambia 'nombre' por el campo que quieras mostrar
-                    ->required()
-                    ->reactive(),
+                ->label('Provincia')
+                ->relationship('provincia', 'nombre') // Cambia 'nombre' por el campo que quieras mostrar
+                ->required()
+                ->reactive()
+                ->afterStateUpdated(fn (callable $set) => $set('municipio_id', null)), // Resetea municipio_id cuando provincia_id cambia
 
-                Select::make('municipio_id')
-                    ->label('Municipio')
-                    ->relationship('municipio', 'nombre') // Cambia 'nombre' por el campo que quieras mostrar
-                    ->required()
-                    ->reactive()
-                    ->afterStateUpdated(function (callable $set, $state) {
-                        $set('municipio_id', null);
-                        return Municipio::where('provincia_id', $state)->pluck('nombre', 'id');
-                    })
-                    ->required()
-                    ->reactive(),
+            Select::make('municipio_id')
+                ->label('Municipio')
+                ->options(function (callable $get) {
+                    $provinciaId = $get('provincia_id');
+                    if (!$provinciaId) {
+                        return [];
+                    }
+
+                    return Municipio::where('provincia_id', $provinciaId)->pluck('nombre', 'id');
+                })
+                ->required()
+                ->reactive(),
                  Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
