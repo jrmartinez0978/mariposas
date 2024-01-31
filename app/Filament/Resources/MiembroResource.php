@@ -61,7 +61,9 @@ class MiembroResource extends Resource
                     ->afterStateUpdated(function (callable $set, $state) {
                         $set('municipio_id', null);
                         return Municipio::where('provincia_id', $state)->pluck('nombre', 'id');
-                    }),
+                    })
+                    ->required()
+                    ->reactive(),
                  Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
