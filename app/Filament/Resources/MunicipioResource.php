@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\MunicipioResource\Pages;
 use App\Filament\Resources\MunicipioResource\RelationManagers;
 use App\Models\Municipio;
+use App\Models\Provincia;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -22,8 +23,17 @@ class MunicipioResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-                //
+        ->schema([
+            Forms\Components\TextInput::make('nombre')
+                ->required()
+                ->label('Nombre del Municipio')
+                ->maxLength(255),
+            Forms\Components\Select::make('provincia_id')
+                ->label('Provincia')
+                ->options(Provincia::all()->pluck('nombre', 'id'))
+                ->searchable()
+                ->required(),
+            // ... otros campos si son necesarios ...
             ]);
     }
 
@@ -31,7 +41,9 @@ class MunicipioResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('nombre')->label('Nombre del Municipio'),
+                Tables\Columns\TextColumn::make('provincia.nombre')->label('Provincia'),
+                // ... otras columnas si son necesarias ...
             ])
             ->filters([
                 //
