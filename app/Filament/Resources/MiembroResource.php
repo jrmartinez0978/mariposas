@@ -140,31 +140,16 @@ Select::make('municipio_id')
 
     }
 
-    public static function getEloquentQuery(): Builder
-{
-    $query = parent::getEloquentQuery();
+    public static function getEloquentQuery(): Builder {
+        $query = parent::getEloquentQuery();
 
-    // Filtrar por provincia si se proporciona el parámetro en la URL
-    if ($provinciaId = request()->query('provincia')) {
-        $query->where('provincia_id', $provinciaId);
+        // Filtrar miembros basados en la política
+        if (!auth()->user()->can('viewAny', Miembro::class)) {
+            $query->where('lider_grupo_id', auth()->user()->miembro->id);
+        }
+
+        return $query;
     }
-
-    // Filtrar por municipio si se proporciona el parámetro en la URL y ya se ha filtrado por provincia
-    if ($municipioId = request()->query('municipio')) {
-        $query->where('municipio_id', $municipioId);
-    }
-
-    // Filtrar miembros basados en la política
-if (!auth()->user()->can('viewAny', Miembro::class)) {
-    if ($miembro = auth()->user()->miembro) {
-        $query->where('lider_grupo_id', $miembro->id);
-    }
-}
-
-
-    return $query;
-}
-
 public static function getPages(): array
 {
     return [
