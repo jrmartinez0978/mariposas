@@ -76,10 +76,12 @@ Select::make('municipio_id')
             Forms\Components\Placeholder::make('emailVerified')
             ->label('Estado de Verificación de Email')
             ->content(function ($record) {
-                return $record->user && $record->user->email_verified_at
-                    ? 'El email ha sido verificado.'
-                    : 'El email aún no ha sido verificado.';
-
+                // Asegurarse de que el registro tiene un usuario asociado y que email_verified_at no es null
+                if ($record && $record->user && $record->user->email_verified_at) {
+                    return 'El email ha sido verificado.';
+                } else {
+                    return 'El email aún no ha sido verificado.';
+                }
     }),
                 Forms\Components\Toggle::make('estado')
                     ->required(),
