@@ -109,7 +109,7 @@ class Miembro extends Model
     $cantidadMiembrosReferidos = $this->miembrosReferidos()->count();
 
     // Actualizar a 'Mariposa Madre' si se cumplen las condiciones
-    if ($cantidadMiembrosReferidos >= 3 && $this->rol === 'Mariposa Azul') {
+    if ($cantidadMiembrosReferidos >= 10 && $this->rol === 'Mariposa Azul') {
         $this->rol = 'Mariposa Padre/Madre';
     }
     // Actualizar a 'Mariposa Reina' si se cumplen las condiciones
@@ -117,7 +117,7 @@ class Miembro extends Model
         $this->rol = 'Mariposa Ejecutiva';
     }
     // Degradar a 'Mariposa Azul' si no se cumple el mínimo de referido
-    elseif ($cantidadMiembrosReferidos < 3 && $this->rol === 'Mariposa Padre/Madre') {
+    elseif ($cantidadMiembrosReferidos < 10 && $this->rol === 'Mariposa Padre/Madre') {
         $this->rol = 'Mariposa Azul';
     }
     // Degradar a 'Mariposa Madre' si los referidos ya no cumplen las condiciones para ser 'Mariposa Reina'
@@ -128,13 +128,16 @@ class Miembro extends Model
     $this->save();
 }
 
-private function todosReferidosTienenDiezReferidos()
-{
+private function todosReferidosTienenDiezReferidos() {
+    // Carga previa de los referidos de los referidos
+    $this->load('miembrosReferidos.miembrosReferidos');
+
     foreach ($this->miembrosReferidos as $referido) {
-        if ($referido->miembrosReferidos()->count() < 3) {
+        if ($referido->miembrosReferidos->count() < 10) {
             return false;
         }
     }
+
     return true;
     }
 }
