@@ -35,12 +35,11 @@ class ProvinciaResource extends Resource {
         return $table
             ->columns([
                 TextColumn::make('nombre')->searchable()->sortable(),
-                TextColumn::make('municipios_count')->label('Municipios O Ditritos Municipales')->sortable(),
+                TextColumn::make('municipios_count')->label('Municipios Y D.M.')->sortable(),
                 TextColumn::make('miembros_count')->label('Mariposas por Provincia')->sortable(),
                 // ... otras columnas ...
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
                 Tables\Actions\Action::make('viewMembers')
                     ->label('Ver Miembros')
                     ->url(fn (Provincia $record): string => route('filament.resources.miembros.index', ['provincia' => $record->id]))
