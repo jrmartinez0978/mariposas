@@ -72,18 +72,14 @@ Select::make('municipio_id')
                 Forms\Components\TextInput::make('telefono')
                     ->tel()
                     ->maxLength(255),
-                    Forms\Components\Checkbox::make('email_verified')
-    ->label('Email Verificado')
-    ->reactive()
-    ->afterStateUpdated(function (callable $set, $state, $record) {
-        if ($state) {
-            // Asegúrate de que el miembro tiene una relación 'user' y actualiza 'email_verified_at'
-            $record->user->email_verified_at = now();
-            $record->user->save();
-        } else {
-            $record->user->email_verified_at = null;
-            $record->user->save();
-        }
+                    // Agregar el mensaje de verificación de email
+            Forms\Components\Placeholder::make('emailVerified')
+            ->label('Estado de Verificación de Email')
+            ->content(function ($record) {
+                return $record->user && $record->user->email_verified_at
+                    ? 'El email ha sido verificado.'
+                    : 'El email aún no ha sido verificado.';
+
     }),
                 Forms\Components\Toggle::make('estado')
                     ->required(),

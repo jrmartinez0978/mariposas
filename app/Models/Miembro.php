@@ -55,6 +55,7 @@ class Miembro extends Model
             'name' => $miembro->nombres . ' ' . $miembro->apellidos,
             'email' => $miembro->email,
             'password' => Hash::make($miembro->password),
+            'email_verified_at' => now(), // Verifica el email automáticamente
         ]);
 
         // Asignar el ID del usuario al miembro
