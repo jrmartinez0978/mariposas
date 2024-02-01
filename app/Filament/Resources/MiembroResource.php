@@ -85,7 +85,7 @@ Select::make('municipio_id')
     }),
                 Forms\Components\Toggle::make('estado')
                     ->required(),
-                Forms\Components\Select::make('nivel')
+                Forms\Components\Select::make('rol')
                     ->options([
                         'Mariposa Azul' => 'Mariposa Azul',
                         'Mariposa Padre/Madre' => 'Mariposa Padre/Madre',
