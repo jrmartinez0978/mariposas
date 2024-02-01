@@ -57,10 +57,10 @@ class MunicipioResource extends Resource
                 // ... filtros si son necesarios ...
             ])
             ->actions([
-                Tables\Actions\Action::make('viewMembers')
-                    ->label('Ver Miembros')
-                    ->url(fn (Municipio $record): string => route('filament.resources.miembros.index', ['municipio' => $record->id]))
-                    ->openUrlInNewTab(),
+                //Tables\Actions\Action::make('viewMembers')
+                  //  ->label('Ver Miembros')
+                   // ->url(fn (Municipio $record): string => route('filament.resources.miembros.index', ['municipio' => $record->id]))
+                   // ->openUrlInNewTab(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),

@@ -40,10 +40,10 @@ class ProvinciaResource extends Resource {
                 // ... otras columnas ...
             ])
             ->actions([
-                Tables\Actions\Action::make('viewMembers')
-                    ->label('Ver Miembros')
-                    ->url(fn (Provincia $record): string => route('filament.resources.miembros.index', ['provincia' => $record->id]))
-                    ->openUrlInNewTab(),
+               // Tables\Actions\Action::make('viewMembers')
+                  //  ->label('Ver Miembros')
+                  //  ->url(fn (Provincia $record): string => route('filament.resources.miembros.index', ['provincia' => $record->id]))
+                    //->openUrlInNewTab(),
             ])
                 // ... otras acciones ...
             ->bulkActions([

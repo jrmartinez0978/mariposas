@@ -121,10 +121,10 @@ Select::make('municipio_id')
                 // Puedes añadir filtros si son necesarios
             ])
             ->actions([
-                Tables\Actions\Action::make('viewMembers')
-                    ->label('Ver Miembros')
-                    ->url(fn (Miembro $record): string => route('filament.resources.miembros.index', ['municipio' => $record->municipio_id]))
-                    ->openUrlInNewTab(),
+                //Tables\Actions\Action::make('viewMembers')
+                   // ->label('Ver Miembros')
+                   // ->url(fn (Miembro $record): string => route('filament.resources.miembros.index', ['municipio' => $record->municipio_id]))
+                   // ->openUrlInNewTab(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
