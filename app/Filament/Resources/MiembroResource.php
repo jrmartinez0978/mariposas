@@ -87,7 +87,7 @@ Select::make('municipio_id')
     }),
                 Forms\Components\Toggle::make('estado')
                     ->required(),
-                Forms\Components\Select::make('rol')
+                Forms\Components\Select::make('nivel')
                     ->options([
                         'Mariposa Azul' => 'Mariposa Azul',
                         'Mariposa Padre/Madre' => 'Mariposa Padre/Madre',
@@ -111,7 +111,7 @@ Select::make('municipio_id')
             Tables\Columns\TextColumn::make('email')->searchable(),
             Tables\Columns\TextColumn::make('telefono')->searchable(),
             Tables\Columns\IconColumn::make('estado')->boolean(),
-            Tables\Columns\TextColumn::make('rol')->label('Rol'),
+            Tables\Columns\TextColumn::make('rol')->label('Nivel'),
             Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
             Tables\Columns\TextColumn::make('updated_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
             Tables\Columns\TextColumn::make('password')->label('Contraseña'),
