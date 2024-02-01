@@ -43,13 +43,10 @@ class MiembroResource extends Resource
                 Forms\Components\TextInput::make('apellidos')
                     ->required()
                     ->maxLength(255),
-                    Forms\Components\TextInput::make('cedula')
-                    ->mask('000-0000000-0')
+                Forms\Components\TextInput::make('cedula')
                     ->required()
                     ->unique(Miembro::class, 'cedula', ignoreRecord: true)
-                    ->maxLength(13)
-                    ->rules(['required', 'regex:/^\d{3}-\d{7}-\d{1}$/']),
-
+                    ->maxLength(255),
                     Select::make('provincia_id')
     ->label('Provincia')
     ->relationship('provincia', 'nombre') // Asegúrate de que 'nombre' es el campo correcto que quieres mostrar
