@@ -40,9 +40,13 @@ class ProvinciaResource extends Resource {
                 // ... otras columnas ...
             ])
             ->actions([
-                EditAction::make(),
-                // ... otras acciones ...
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('viewMembers')
+                    ->label('Ver Miembros')
+                    ->url(fn (Provincia $record): string => route('filament.resources.miembros.index', ['provincia' => $record->id]))
+                    ->openUrlInNewTab(),
             ])
+                // ... otras acciones ...
             ->bulkActions([
                 DeleteBulkAction::make(),
             ])

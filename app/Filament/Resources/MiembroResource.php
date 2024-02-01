@@ -122,10 +122,15 @@ Select::make('municipio_id')
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('viewMembers')
+                    ->label('Ver Miembros')
+                    ->url(fn (Municipio $record): string => route('filament.resources.miembros.index', ['municipio' => $record->id]))
+                    ->openUrlInNewTab(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
+
     }
 
     public static function getRelations(): array
@@ -133,6 +138,25 @@ Select::make('municipio_id')
         return [
             // Define tus relaciones aquí si son necesaria
         ];
+
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        // Filtrar por provincia si se proporciona el parámetro en la URL
+        if ($provinciaId = request()->query('provincia')) {
+            $query->where('provincia_id', $provinciaId);
+
+            // Filtrar por municipio si se proporciona el parámetro en la URL y ya se ha filtrado por provincia
+            if ($municipioId = request()->query('municipio')) {
+                $query->where('municipio_id', $municipioId);
+            }
+        }
+
+
+        return $query;
     }
 
     public static function getPages(): array
@@ -143,6 +167,5 @@ Select::make('municipio_id')
             'edit' => Pages\EditMiembro::route('/{record}/edit'),
         ];
     }
+
 }
-
-
