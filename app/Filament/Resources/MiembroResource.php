@@ -68,6 +68,7 @@ Select::make('municipio_id')
                  Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
+                    ->unique(Miembro::class, 'email', ignoreRecord: true)
                     ->maxLength(255),
                 Forms\Components\TextInput::make('telefono')
                     ->tel()
