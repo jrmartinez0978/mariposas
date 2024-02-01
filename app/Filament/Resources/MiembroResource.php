@@ -141,30 +141,37 @@ Select::make('municipio_id')
     }
 
     public static function getEloquentQuery(): Builder
-    {
-        $query = parent::getEloquentQuery();
+{
+    $query = parent::getEloquentQuery();
 
-        // Filtrar por provincia si se proporciona el parámetro en la URL
-        if ($provinciaId = request()->query('provincia')) {
-            $query->where('provincia_id', $provinciaId);
-
-            // Filtrar por municipio si se proporciona el parámetro en la URL y ya se ha filtrado por provincia
-            if ($municipioId = request()->query('municipio')) {
-                $query->where('municipio_id', $municipioId);
-            }
-        }
-
-
-        return $query;
+    // Filtrar por provincia si se proporciona el parámetro en la URL
+    if ($provinciaId = request()->query('provincia')) {
+        $query->where('provincia_id', $provinciaId);
     }
 
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListMiembros::route('/'),
-            'create' => Pages\CreateMiembro::route('/create'),
-            'edit' => Pages\EditMiembro::route('/{record}/edit'),
-        ];
+    // Filtrar por municipio si se proporciona el parámetro en la URL y ya se ha filtrado por provincia
+    if ($municipioId = request()->query('municipio')) {
+        $query->where('municipio_id', $municipioId);
     }
+
+    // Filtrar miembros basados en la política
+if (!auth()->user()->can('viewAny', Miembro::class)) {
+    if ($miembro = auth()->user()->miembro) {
+        $query->where('lider_grupo_id', $miembro->id);
+    }
+}
+
+
+    return $query;
+}
+
+public static function getPages(): array
+{
+    return [
+        'index' => Pages\ListMiembros::route('/'),
+        'create' => Pages\CreateMiembro::route('/create'),
+        'edit' => Pages\EditMiembro::route('/{record}/edit'),
+    ];
+ }
 
 }
