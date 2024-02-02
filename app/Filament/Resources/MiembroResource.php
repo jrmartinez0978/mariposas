@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Select;
 use App\Models\Provincia;
 use App\Models\Municipio;
+use Illuminate\Support\Facades\Gate;
 
 class MiembroResource extends Resource
 {
@@ -140,17 +141,18 @@ Select::make('municipio_id')
 
     }
 
-    public static function getEloquentQuery(): Builder
-{
-    $query = parent::getEloquentQuery();
+    public static function getEloquentQuery(): Builder {
+        $query = parent::getEloquentQuery();
 
-    // Filtrar miembros basados en la política
-    if (!auth()->user()->can('viewAny', Miembro::class)) {
-        $query->where('lider_grupo_id', auth()->user()->miembro->id);
+        // Si el usuario no tiene permiso para ver todos los miembros, filtrar los resultados
+        if (!Gate::allows('viewAny', Miembro::class)) {
+            // Aquí aplicas tu lógica basada en el rol del usuario
+            // Por ejemplo, si solo puede ver sus referidos:
+            $query->where('lider_grupo_id', auth()->user()->miembro->id);
+        }
+
+        return $query;
     }
-
-    return $query;
-}
 
 public static function getPages(): array
 {
