@@ -98,6 +98,28 @@ class Miembro extends Model
     {
         return $this->hasMany(Miembro::class, 'lider_grupo_id', 'miembros_id');
     }
+        //ok
+
+        // Método para obtener los IDs de los referidos directos
+    public function obtenerIdsReferidosDirectos()
+    {
+        return $this->miembrosReferidos->pluck('id');
+    }
+
+    // Método para obtener los IDs de todos los referidos en el árbol jerárquico
+    public function obtenerTodosIdsReferidos()
+    {
+        $todosReferidosIds = collect();
+
+        foreach ($this->miembrosReferidos as $referido) {
+            $todosReferidosIds->push($referido->id);
+            $todosReferidosIds = $todosReferidosIds->merge($referido->obtenerTodosIdsReferidos());
+        }
+
+        return $todosReferidosIds->unique();
+
+        //ok
+    }
 
     public function user()
     {

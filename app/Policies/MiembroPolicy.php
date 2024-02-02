@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\User;
 use App\Models\Miembro;
-use App\Policies\create;
 
 class MiembroPolicy
 {
@@ -16,53 +15,29 @@ class MiembroPolicy
 
     public function view(User $user, Miembro $miembro)
     {
-        // Mariposa Azul solo puede ver sus miembros referidos
-        if ($user->miembro->rol === 'Mariposa Azul') {
-            return $miembro->lider_grupo_id === $user->miembro->id;
+        // Obtener el rol del miembro asociado al usuario
+        $userMiembro = $user->miembro;
+        $rol = $userMiembro->rol;
+
+        // Mariposa Azul solo puede ver sus miembros referidos directamente
+        if ($rol === 'Mariposa Azul') {
+            return $miembro->lider_grupo_id === $userMiembro->id;
         }
 
         // Mariposa Padre/Madre puede ver sus miembros y los de sus referidos
-        if ($user->miembro->rol === 'Mariposa Padre/Madre') {
-            return $miembro->lider_grupo_id === $user->miembro->id ||
-                   $miembro->liderGrupo->lider_grupo_id === $user->miembro->id;
+        if ($rol === 'Mariposa Padre/Madre') {
+            $referidosIds = $userMiembro->obtenerIdsReferidosDirectos(); // Función hipotética en el modelo Miembro
+            return in_array($miembro->lider_grupo_id, $referidosIds);
         }
 
-        /// Mariposa Ejecutiva puede ver sus referidos y los referidos de sus referidos
-    if ($user->miembro->rol === 'Mariposa Ejecutiva') {
-        return $this->esReferidoDeMariposaEjecutiva($user->miembro, $miembro);
-    }
+        // Mariposa Ejecutiva puede ver todos los miembros en su árbol jerárquico
+        if ($rol === 'Mariposa Ejecutiva') {
+            $todosReferidosIds = $userMiembro->obtenerTodosIdsReferidos(); // Función hipotética en el modelo Miembro
+            return in_array($miembro->id, $todosReferidosIds);
+        }
 
-    return false;
-}
-
-/**
- * Determina si un miembro es referido directo o indirecto de una Mariposa Ejecutiva.
- *
- * @param  \App\Models\Miembro  $mariposaEjecutiva
- * @param  \App\Models\Miembro  $miembro
- * @return bool
- */
-private function esReferidoDeMariposaEjecutiva(Miembro $mariposaEjecutiva, Miembro $miembro)
-{
-    // Un miembro no puede ser referido de sí mismo
-    if ($mariposaEjecutiva->id === $miembro->id) {
+        // Por defecto, no se permite ver el miembro
         return false;
     }
-
-    // Comprobar si el miembro es un referido directo
-    if ($miembro->lider_grupo_id === $mariposaEjecutiva->id) {
-        return true;
-    }
-
-    // Comprobar si el miembro es un referido indirecto (a través de otros referidos)
-    $referido = $miembro->liderGrupo;
-    while ($referido) {
-        if ($referido->id === $mariposaEjecutiva->id) {
-            return true;
-        }
-        $referido = $referido->liderGrupo;
-    }
-
-    return false;
-    }
 }
+
