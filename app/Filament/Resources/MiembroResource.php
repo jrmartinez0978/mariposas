@@ -17,7 +17,6 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Select;
 use App\Models\Provincia;
 use App\Models\Municipio;
-use Illuminate\Support\Facades\Gate;
 
 class MiembroResource extends Resource
 {
@@ -141,46 +140,16 @@ Select::make('municipio_id')
 
     }
 
-    public static function getEloquentQuery(): Builder {
-        $query = parent::getEloquentQuery();
+    public static function getEloquentQuery(): Builder
+{
+    $query = parent::getEloquentQuery();
 
-        // Obtiene el usuario actual y su rol
-        $user = auth()->user();
-        $rol = $user->miembro->rol;
-
-        // Filtrar miembros basados en la política y el rol del usuario
-        if (!Gate::allows('viewAny', Miembro::class)) {
-            switch ($rol) {
-                case 'Mariposa Azul':
-                    // Restringe la consulta a los miembros que el usuario actual puede ver
-                    $query->where('lider_grupo_id', $user->miembro->id);
-                    break;
-
-                case 'Mariposa Padre/Madre':
-                    // Incluye miembros directos y referidos de sus referidos
-                    $query->where('lider_grupo_id', $user->miembro->id)
-                          ->orWhereHas('liderGrupo', function ($query) use ($user) {
-                              $query->where('lider_grupo_id', $user->miembro->id);
-                          });
-                    break;
-
-                case 'Mariposa Ejecutiva':
-                    // Incluye miembros directos y todos los referidos indirectos
-                    $query->where(function ($query) use ($user) {
-                        $query->where('lider_grupo_id', $user->miembro->id)
-                              ->orWhere(function ($query) use ($user) {
-                                  // Usa la función de la política para filtrar referidos indirectos
-                                  $query->whereRaw('FIND_IN_SET(lider_grupo_id,
-                                      (SELECT GROUP_CONCAT(id) FROM miembros WHERE lider_grupo_id = ?))',
-                                      [$user->miembro->id]);
-                              });
-                    });
-                    break;
-            }
-        }
-
-        return $query;
+    if (!auth()->user()->can('viewAny', Miembro::class)) {
+        $query->where('lider_grupo_id', auth()->user()->miembro->id);
     }
+
+    return $query;
+}
 
 
 
