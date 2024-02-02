@@ -141,17 +141,22 @@ Select::make('municipio_id')
     }
 
     public static function getEloquentQuery(): Builder
-{
-    $query = parent::getEloquentQuery();
+    {
+        $query = parent::getEloquentQuery();
 
-    if (!auth()->user()->can('viewAny', Miembro::class)) {
-        $query->where('lider_grupo_id', auth()->user()->miembro->id);
+        // Filtrar miembros basados en la política
+        $user = auth()->user();
+        if ($user && $user->miembro) {
+            if ($user->can('viewAny', Miembro::class)) {
+                // Puede ver cualquier miembro
+            } else {
+                // Restringir a ver solo sus referidos
+                $query->where('lider_grupo_id', $user->miembro->id);
+            }
+        }
+
+        return $query;
     }
-
-    return $query;
-}
-
-
 
 public static function getPages(): array
 {
