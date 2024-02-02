@@ -144,7 +144,8 @@ Select::make('municipio_id')
         $query = parent::getEloquentQuery();
 
         // Filtrar miembros basados en la política
-        if (!auth()->user()->can('viewAny', Miembro::class)) {
+        if (!auth()->user()
+                ->can('viewAny', Miembro::class)) {
             $query->where('lider_grupo_id', auth()->user()->miembro->id);
         }
 
