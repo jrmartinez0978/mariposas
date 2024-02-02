@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Select;
 use App\Models\Provincia;
 use App\Models\Municipio;
+use Illuminate\Support\Facades\Gate;
 
 class MiembroResource extends Resource
 {
@@ -144,13 +145,21 @@ Select::make('municipio_id')
         $query = parent::getEloquentQuery();
 
         // Filtrar miembros basados en la política
-        if (!auth()->user()
-                ->can('viewAny', Miembro::class)) {
-            $query->where('lider_grupo_id', auth()->user()->miembro->id);
+        if (!Gate::allows('viewAny', Miembro::class)) {
+            // Restringe la consulta a los miembros que el usuario actual puede ver
+            $query->where(function ($query) {
+                $query->where('lider_grupo_id', auth()->user()->miembro->id)
+                      ->orWhereHas('liderGrupo', function ($query) {
+                          $query->where('lider_grupo_id', auth()->user()->miembro->id);
+                      });
+                // ... (añade otras condiciones según sea necesario)
+            });
         }
 
         return $query;
     }
+
+
 public static function getPages(): array
 {
     return [
