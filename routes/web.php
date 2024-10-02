@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MiembroController;
+
+Route::post('/miembro/{miembroId}/rol/{roleId}', [MiembroController::class, 'asignarRol']);
 
 /*
 |--------------------------------------------------------------------------

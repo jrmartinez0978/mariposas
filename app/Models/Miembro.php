@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 
+
+
 class Miembro extends Model
 {
     protected $table = 'miembros';
@@ -88,6 +90,11 @@ class Miembro extends Model
         return $this->belongsTo(Miembro::class, 'lider_grupo_id', 'miembros_id');
     }
 
+    public function role()
+{
+    // Asume que la tabla 'roles' tiene una columna 'id' que es la clave primaria
+    return $this->belongsTo(Role::class, 'rol');
+}
     // Accesor para obtener el nombre completo del líder de grupo
     public function getNombreCompletoAttribute()
     {
@@ -148,6 +155,8 @@ class Miembro extends Model
     }
 
     $this->save();
+
+
 }
 
 private function todosReferidosTienenDiezReferidos() {
@@ -162,4 +171,5 @@ private function todosReferidosTienenDiezReferidos() {
 
     return true;
     }
+
 }
