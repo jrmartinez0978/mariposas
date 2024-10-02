@@ -18,6 +18,8 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Awcodes\Overlook\OverlookPlugin;
+use Awcodes\Overlook\Widgets\OverlookWidget;
 
 class PanelPanelProvider extends PanelProvider
 {
@@ -25,12 +27,24 @@ class PanelPanelProvider extends PanelProvider
     {
       //panel de filament
         return $panel
+        ->plugins([
+            OverlookPlugin::make()
+                ->sort(2)
+                ->columns([
+                    'default' => 1,
+                    'sm' => 1,
+                    'md' => 2,
+                    'lg' => 2,
+                    'xl' => 3,
+                    '2xl' => null,
+                ]),
+        ])
             ->default()
             ->id('panel')
             ->path('panel')
             ->login()
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Red,
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
@@ -40,6 +54,7 @@ class PanelPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
+                        OverlookWidget::class,
             ])
             ->login()
             ->passwordReset()
@@ -58,6 +73,7 @@ class PanelPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+            ->viteTheme('resources/css/filament/panel/theme.css');
     }
 }
