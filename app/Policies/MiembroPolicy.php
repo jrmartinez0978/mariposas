@@ -15,6 +15,11 @@ class MiembroPolicy
 
     public function view(User $user, Miembro $miembro)
     {
+        // Validar que el usuario tenga un miembro asociado
+        if (!$user->miembro) {
+            return false;
+        }
+
         // Obtener el rol del miembro asociado al usuario
         $userMiembro = $user->miembro;
         $rol = $userMiembro->rol;
