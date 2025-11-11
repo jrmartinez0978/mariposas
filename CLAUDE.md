@@ -4,7 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-"Mariposas" is a Laravel 11 application with Filament 3 admin panel for managing a hierarchical member organization system. The application tracks members (Miembros) with automatic role progression based on referral counts.
+"Mariposas" is a Laravel 11 application with dual interfaces:
+1. **Filament 3 Admin Panel** (`/panel`) - For administrators to manage the system
+2. **Member Dashboard** (`/dashboard`) - Modern, reactive interface for members built with Livewire + Alpine.js + Tailwind CSS
+
+The application tracks members (Miembros) with automatic role progression based on referral counts.
 
 ## Development Commands
 
@@ -179,6 +183,53 @@ The `Miembro` model has recursive methods for querying the referral tree:
 - Vite for asset bundling
 - TailwindCSS for styling
 - Alpine.js (via Filament)
+- Livewire 3 for reactive components
+
+## Member Dashboard
+
+### Overview
+Modern, professional dashboard for members (`/dashboard`) built with Blade, Livewire, Alpine.js, and Tailwind CSS.
+
+### Routes
+- `/dashboard` - Main dashboard with statistics and progress
+- `/mis-referidos` - View all direct referrals with filters
+- `/mi-perfil` - Member profile view
+
+**Controller:** `app/Http/Controllers/DashboardController.php`
+
+### Features
+- **Real-time Statistics**: Referral counts, network size, role distribution
+- **Progress Tracking**: Visual progress bars showing advancement to next role
+- **Referral Management**: Table view with search and filters
+- **Role Visualization**: Color-coded badges and emojis for each role
+- **Responsive Design**: Mobile-first design with Tailwind CSS
+- **Modern UI**: Gradient backgrounds, smooth transitions, professional cards
+
+### Layout Structure
+**Base Layout:** `resources/views/layouts/app.blade.php`
+- Gradient navbar with navigation
+- User menu with profile and logout
+- Mobile-responsive hamburger menu
+- Alpine.js for dropdown interactions
+
+**Views:**
+- `resources/views/dashboard/index.blade.php` - Main dashboard
+- `resources/views/dashboard/referidos.blade.php` - Referrals list
+- `resources/views/dashboard/perfil.blade.php` - Profile view
+
+### Design System
+**Colors:**
+- Primary gradient: Pink-600 → Purple-600 → Blue-600
+- Roles:
+  - Mariposa Azul: Blue (🦋)
+  - Mariposa Padre/Madre: Purple (👑)
+  - Mariposa Ejecutiva: Yellow (⭐)
+
+**Components:**
+- Gradient stat cards with hover effects
+- Animated progress bars
+- Avatar initials with gradient backgrounds
+- Status badges (active/inactive, roles)
 
 ## Configuration Notes
 
