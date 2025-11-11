@@ -144,11 +144,34 @@ Select::make('municipio_id')
     public static function getEloquentQuery(): Builder {
         $query = parent::getEloquentQuery();
 
-        // Si el usuario no tiene permiso para ver todos los miembros, filtrar los resultados
-        if (!Gate::allows('viewAny', Miembro::class)) {
-            // Aquí aplicas tu lógica basada en el rol del usuario
-            // Por ejemplo, si solo puede ver sus referidos:
-            $query->where('lider_grupo_id', auth()->user()->miembro->id);
+        $user = auth()->user();
+
+        // Verificar que el usuario tenga un miembro asociado
+        if (!$user || !$user->miembro) {
+            return $query->whereRaw('1 = 0'); // No devolver ningún registro
+        }
+
+        $userMiembro = $user->miembro;
+        $rol = $userMiembro->rol;
+
+        // Filtrar según el rol
+        if ($rol === 'Mariposa Azul') {
+            // Solo ve sus referidos directos
+            $query->where('lider_grupo_id', $userMiembro->miembros_id);
+        } elseif ($rol === 'Mariposa Padre/Madre') {
+            // Ve sus referidos directos Y los referidos de sus referidos (2 niveles)
+            $referidosDirectosIds = $userMiembro->obtenerIdsReferidosDirectos();
+
+            $query->where(function($q) use ($userMiembro, $referidosDirectosIds) {
+                // Referidos directos del usuario
+                $q->where('lider_grupo_id', $userMiembro->miembros_id)
+                  // O referidos de los referidos del usuario
+                  ->orWhereIn('lider_grupo_id', $referidosDirectosIds);
+            });
+        } elseif ($rol === 'Mariposa Ejecutiva') {
+            // Ve todo su árbol jerárquico
+            $todosReferidosIds = $userMiembro->obtenerTodosIdsReferidos();
+            $query->whereIn('miembros_id', $todosReferidosIds);
         }
 
         return $query;
