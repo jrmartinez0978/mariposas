@@ -28,16 +28,14 @@ class MiembroResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-
             ->schema([
-                Forms\Components\TextInput::make('password')
-                ->label('Contraseña')
-                ->disabled(),
                 Forms\Components\Select::make('lider_grupo_id')
                     ->label('Líder de Grupo')
-                    ->options(Miembro::all()->pluck('nombreCompleto', 'miembros_id'))
+                    ->relationship('liderGrupo', 'nombres')
+                    ->getOptionLabelFromRecordUsing(fn (Miembro $record) => $record->nombreCompleto)
+                    ->searchable(['nombres', 'apellidos', 'cedula'])
                     ->nullable()
-                    ->searchable(),
+                    ->preload(),
                 Forms\Components\TextInput::make('nombres')
                     ->required()
                     ->maxLength(255),
@@ -114,7 +112,6 @@ Select::make('municipio_id')
             Tables\Columns\TextColumn::make('rol')->label('Nivel'),
             Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
             Tables\Columns\TextColumn::make('updated_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
-            Tables\Columns\TextColumn::make('password')->label('Contraseña'),
             // ... otras columnas ...
         ])
         // ... definiciones de columnas, filtros, acciones, etc. ..
@@ -122,10 +119,8 @@ Select::make('municipio_id')
                 // Puedes añadir filtros si son necesarios
             ])
             ->actions([
-                //Tables\Actions\Action::make('viewMembers')
-                   // ->label('Ver Miembros')
-                   // ->url(fn (Miembro $record): string => route('filament.resources.miembros.index', ['municipio' => $record->municipio_id]))
-                   // ->openUrlInNewTab(),
+                Tables\Actions\ViewAction::make(),
+                Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
