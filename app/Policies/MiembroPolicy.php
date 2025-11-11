@@ -15,25 +15,36 @@ class MiembroPolicy
 
     public function view(User $user, Miembro $miembro)
     {
+        // Validar que el usuario tenga un miembro asociado
+        if (!$user->miembro) {
+            return false;
+        }
+
         // Obtener el rol del miembro asociado al usuario
         $userMiembro = $user->miembro;
         $rol = $userMiembro->rol;
 
         // Mariposa Azul solo puede ver sus miembros referidos directamente
         if ($rol === 'Mariposa Azul') {
-            return $miembro->lider_grupo_id === $userMiembro->id;
+            return $miembro->lider_grupo_id === $userMiembro->miembros_id;
         }
 
-        // Mariposa Padre/Madre puede ver sus miembros y los de sus referidos
+        // Mariposa Padre/Madre puede ver sus miembros y los de sus referidos (2 niveles)
         if ($rol === 'Mariposa Padre/Madre') {
-            $referidosIds = $userMiembro->obtenerIdsReferidosDirectos(); // Función hipotética en el modelo Miembro
-            return in_array($miembro->lider_grupo_id, $referidosIds);
+            // Puede ver sus referidos directos
+            if ($miembro->lider_grupo_id === $userMiembro->miembros_id) {
+                return true;
+            }
+
+            // Puede ver los referidos de sus referidos
+            $referidosDirectosIds = $userMiembro->obtenerIdsReferidosDirectos();
+            return in_array($miembro->lider_grupo_id, $referidosDirectosIds->toArray());
         }
 
         // Mariposa Ejecutiva puede ver todos los miembros en su árbol jerárquico
         if ($rol === 'Mariposa Ejecutiva') {
-            $todosReferidosIds = $userMiembro->obtenerTodosIdsReferidos(); // Función hipotética en el modelo Miembro
-            return in_array($miembro->id, $todosReferidosIds);
+            $todosReferidosIds = $userMiembro->obtenerTodosIdsReferidos();
+            return in_array($miembro->miembros_id, $todosReferidosIds->toArray());
         }
 
         // Por defecto, no se permite ver el miembro

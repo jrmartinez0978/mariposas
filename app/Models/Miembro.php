@@ -23,7 +23,8 @@ class Miembro extends Model
         'estado',   // Cambiado de 'miembros_estado' a 'estado'
         'lider_grupo_id',
         'rol',
-        'municipio_id'   // Nueva columna 'municipio'
+        'municipio_id',   // Nueva columna 'municipio'
+        'user_id'   // ID del usuario asociado
     ];
 
     public function provincia()
@@ -110,7 +111,7 @@ class Miembro extends Model
         // Método para obtener los IDs de los referidos directos
     public function obtenerIdsReferidosDirectos()
     {
-        return $this->miembrosReferidos->pluck('id');
+        return $this->miembrosReferidos->pluck('miembros_id');
     }
 
     // Método para obtener los IDs de todos los referidos en el árbol jerárquico
@@ -119,7 +120,7 @@ class Miembro extends Model
         $todosReferidosIds = collect();
 
         foreach ($this->miembrosReferidos as $referido) {
-            $todosReferidosIds->push($referido->id);
+            $todosReferidosIds->push($referido->miembros_id);
             $todosReferidosIds = $todosReferidosIds->merge($referido->obtenerTodosIdsReferidos());
         }
 

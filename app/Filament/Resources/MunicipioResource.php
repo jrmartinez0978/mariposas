@@ -31,9 +31,10 @@ class MunicipioResource extends Resource
                 ->maxLength(255),
             Forms\Components\Select::make('provincia_id')
                 ->label('Provincia')
-                ->options(Provincia::all()->pluck('nombre', 'id'))
+                ->relationship('provincia', 'nombre')
                 ->searchable()
-                ->required(),
+                ->required()
+                ->preload(),
             // ... otros campos si son necesarios ...
             ]);
     }
