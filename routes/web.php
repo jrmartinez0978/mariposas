@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MiembroController;
+use App\Http\Controllers\DashboardController;
 
 Route::post('/miembro/{miembroId}/rol/{roleId}', [MiembroController::class, 'asignarRol']);
 
@@ -17,5 +18,15 @@ Route::post('/miembro/{miembroId}/rol/{roleId}', [MiembroController::class, 'asi
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    if (auth()->check()) {
+        return redirect()->route('dashboard');
+    }
+    return redirect()->route('filament.panel.auth.login');
+})->name('home');
+
+// Dashboard de Mariposas (Requiere autenticación)
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/mis-referidos', [DashboardController::class, 'referidos'])->name('dashboard.referidos');
+    Route::get('/mi-perfil', [DashboardController::class, 'perfil'])->name('dashboard.perfil');
 });
